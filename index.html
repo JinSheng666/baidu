@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淘宝</title>
+    <style>
+        body{
+            background-color: #e8e2e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .head{
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+        }
+
+        .head .searchbox{
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+        }
+        .head .searchbox .inputer{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 40px;
+            border: 2px solid #ff5000;
+            border-radius: 20px;
+            padding: 0 10px;
+            background-color: white;
+        }
+        .inputer select{
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        .inputer input{
+            border: none;
+            outline: none;
+            width: 80%;
+            height: 90%;
+            font-size: 16px;
+        }
+        .inputer .btn{
+            width: 80px;
+            height: 30px;
+            background-image: linear-gradient(145deg,#ff9000,#ff5000 77%);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .keywords{
+            display: flex;
+            font-size: 80%;
+            color:#666;
+            margin:10px 0px 0px 20px;
+            gap: 10px;
+        }
+        
+        .body{
+            background-color: white;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+        }
+        .toparea{
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            background-color: white;
+        }
+        .toparea img{
+            width: 100%;
+        }
+
+        .main{
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .tuijian{
+            background-image: linear-gradient(45deg,#ff9000,#ff5000);
+            width: 50px;
+            height: 20px;
+            color: white;
+            font-size: 60%;
+            padding: 0px 4px 0px 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .items{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .items .item{
+            display: flex;
+            align-items: center;
+            background-color: #eff6f8;
+            border-radius: 20px;
+            width: 300px;
+            height: 120px;
+            padding:11px;
+            overflow: hidden;
+            margin-top: 20px;
+
+        }
+        .item .pic{
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            
+        }
+        .item .right{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 10px;
+            height: 90%;
+        }
+        .right .title{
+            max-height: 69px;
+            line-height: 23px;
+            overflow: hidden;
+        }
+
+    </style>
+    <script>
+        window.onscroll=()=>{
+            if(document.documentElement.clientHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight){
+                refreshData();
+                console.log("触底")
+            }
+
+        }
+
+        window.onload=()=>{
+            refreshData()
+            
+        }
+        
+        var page = 1;
+
+        function refreshData(){
+            fetch('https://cdnj.gzstvcloud.com/SystemBs/io/bitPro.aspx?cmd=get_recommendItems&page='+page+'&count=9')
+            .then(res=>res.json())
+            .then(res=>{
+                console.log(res)
+
+                var itemsinnHTML = '';
+
+                for(var i = 0;i < res.data.length;i++){
+                    var nn = res.data[i].price
+                    var dd = ~~nn;
+                    var cc = dd / 100;
+
+                    itemsinnHTML += '<div class="item">'
+                   + '<img src="'+res.data[i].image+'" alt="" class="pic">'
+                   + '<div class="right">'
+                     +   '<div class="title">'+res.data[i].title+'</div>'
+                     +   '<div style="color: #ff5000;font-size:120%;font-weight:bold">'+"￥"+cc.toFixed(2)+'</div>'//.toFixed(3)
+                 + ' </div>'
+              + ' </div>'
+            }
+            page++;
+            var item = document.getElementById("items").innerHTML;
+            document.getElementById("items").innerHTML= item + itemsinnHTML ;
+            })
+        }
+
+        
+        function test(){
+            refreshData();
+            
+        }
+    </script>
+</head>
+<body>
+    <div class="head">
+        <img src="https://gw.alicdn.com/imgextra/i3/O1CN01uRz3de23mzWofmPYX_!!6000000007299-2-tps-143-59.png" alt="" style="width: 100px;">
+        <div class="searchbox">
+            <div class="inputer">
+                <select>
+                    <option value ="volvo">宝贝</option>
+                    <option value ="saab">天猫</option>
+                    <option value="opel">店铺</option>
+                  </select>
+                <input type="text">
+                <div class="btn" onclick="refreshData()">搜索</div>
+            </div>
+            <div class="keywords">
+                <div>新款连衣裙</div>
+                <div>四件套</div>
+                <div>潮流T恤</div>
+                <div>时尚女鞋</div>
+                <div>短裤</div>
+                <div>半身裙</div>
+            </div>
+        </div>
+        <img src="images/app.png" alt="" style="width: 60px;">
+    </div>
+   
+    <div class="body">
+         <div class="toparea">
+            <img src="images/淘宝.jpg" alt="">
+        </div>
+        <div class="main">
+            <div style="margin-left: 20px;display: flex;align-items: flex-end;">
+                <span style="font-size: 150%;">猜你喜欢</span>
+                <span class="tuijian">个性推荐</span>
+            </div>
+            <div class="items" id="items">
+                <!-- <div class="item"><img src="images/梦想.jpg" alt="" class="pic">
+                    <div class="right">
+                        <div class="title">穿越代购必中福彩双色球</div>
+                         <div style="color: #ff5000;font-size:120%;font-weight:bold">¥999</div>
+                   </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
